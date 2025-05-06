@@ -1,4 +1,4 @@
-'use client' 
+'use client'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import axios from "axios"
@@ -7,35 +7,35 @@ import { useState } from "react"
 import { z } from "zod"
 
 const LoginValidation = z.object({
-    email:z.string().email("Invalid Email"),
-    password: z.string().min(8,"Password must be at least 8 characters")
+    email: z.string().email("Invalid Email"),
+    password: z.string().min(8, "Password must be at least 8 characters")
 })
 
-export default function LoginPage(){
+export default function LoginPage() {
 
-    const [email,setEmail] = useState<string>("")
-    const [password,setPassword] = useState<string>("")
-    const [error,setError] = useState<string>("")
-    
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [error, setError] = useState<string>("")
+
     const router = useRouter()
 
-    const handleLoginClick = async() => {
-        const validation = LoginValidation.safeParse({email, password})
+    const handleLoginClick = async () => {
+        const validation = LoginValidation.safeParse({ email, password })
 
-        if(!validation.success){
+        if (!validation.success) {
             const errorMes = validation.error.errors[0].message
             setError(errorMes)
             return
         }
 
-        try{
-            const response = await axios.post("http://localhost:8888/api/auth/login",{
+        try {
+            const response = await axios.post("https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/auth/login", {
                 email, password
             })
             const token = response.data.token;
             localStorage.setItem('token', token);
             router.push('/products')
-        }catch(error: any){
+        } catch (error: any) {
             setError(error?.response?.data?.message || "Login Failed")
 
         }
@@ -45,13 +45,13 @@ export default function LoginPage(){
         <div className="flex flex-col gap-4 justify-center items-center">
             <h2 className="text-2xl font-bold">Login</h2>
             <div className="flex flex-col gap-4 ">
-                <Input 
+                <Input
                     type="email"
                     placeholder="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <Input 
+                <Input
                     type="password"
                     placeholder="password"
                     value={password}
@@ -61,7 +61,7 @@ export default function LoginPage(){
                 <Button onClick={handleLoginClick}>Login</Button>
 
             </div>
-           
+
         </div>
     )
 

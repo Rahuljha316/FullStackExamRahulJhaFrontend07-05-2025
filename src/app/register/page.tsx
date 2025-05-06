@@ -1,4 +1,4 @@
-'use client' 
+'use client'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import axios from "axios"
@@ -7,40 +7,40 @@ import { useState } from "react"
 import { z } from "zod"
 
 const registerValidation = z.object({
-    email:z.string().email("Invalid Email"),
+    email: z.string().email("Invalid Email"),
     password: z.string()
-    .min(8,"Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Must include Uppercase")
-    .regex(/[a-z]/, "Must include Lowercase")
-    .regex(/[0-9]/, "Must include Number")
-    .regex(/[^A-Za-z0-9]/, "Must include Special Character")
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Must include Uppercase")
+        .regex(/[a-z]/, "Must include Lowercase")
+        .regex(/[0-9]/, "Must include Number")
+        .regex(/[^A-Za-z0-9]/, "Must include Special Character")
 })
 
-export default function RegisterPage(){
+export default function RegisterPage() {
 
-    const [email,setEmail] = useState<string>("")
-    const [password,setPassword] = useState<string>("")
-    const [error,setError] = useState<string>("")
-    
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [error, setError] = useState<string>("")
+
     const router = useRouter()
 
-    const handleRegister = async() => {
-        const validation = registerValidation.safeParse({email, password})
+    const handleRegister = async () => {
+        const validation = registerValidation.safeParse({ email, password })
 
-        if(!validation.success){
+        if (!validation.success) {
             const errorMes = validation.error.errors[0].message
             setError(errorMes)
             return
         }
 
-        try{
-            const response = await axios.post("http://localhost:8888/api/auth/register",{
+        try {
+            const response = await axios.post("https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/auth/register", {
                 email, password
             })
             const token = response.data.token;
             localStorage.setItem('token', token);
             router.push('/login')
-        }catch(error: any){
+        } catch (error: any) {
             setError(error?.response?.data?.message || "Registration Failed")
 
         }
@@ -50,13 +50,13 @@ export default function RegisterPage(){
         <div className="flex flex-col gap-4 justify-center items-center">
             <h2 className="text-2xl font-bold">Register</h2>
             <div className="flex flex-col gap-4 ">
-                <Input 
+                <Input
                     type="email"
                     placeholder="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <Input 
+                <Input
                     type="password"
                     placeholder="password"
                     value={password}
@@ -66,7 +66,7 @@ export default function RegisterPage(){
                 <Button onClick={handleRegister}>Register</Button>
 
             </div>
-           
+
         </div>
     )
 
