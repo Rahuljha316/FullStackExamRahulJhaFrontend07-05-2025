@@ -36,7 +36,11 @@ export default function LoginPage() {
             localStorage.setItem('token', token);
             router.push('/products')
         } catch (error) {
-            setError(error?.response?.data?.message || "Login Failed")
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data?.message || "Login Failed");
+            } else {
+                setError("An unexpected error occurred");
+            }
 
         }
 

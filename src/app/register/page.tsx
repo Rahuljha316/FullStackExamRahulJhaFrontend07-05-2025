@@ -41,7 +41,11 @@ export default function RegisterPage() {
             localStorage.setItem('token', token);
             router.push('/login')
         } catch (error) {
-            setError(error?.response?.data?.message || "Registration Failed")
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data?.message || "Registration Failed");
+            } else {
+                setError("An unexpected error occurred");
+            }
 
         }
 
