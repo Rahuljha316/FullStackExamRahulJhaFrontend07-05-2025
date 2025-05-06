@@ -29,7 +29,7 @@ export default function LoginPage() {
         }
 
         try {
-            const response = await axios.post("https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/auth/login", {
+            const response = await axios.post("https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/auth/login", {
                 email, password
             })
             const token = response.data.token;

@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import axios from "axios"
 import { useEffect, useState } from "react";
+import ProductModal from "./components/ProductModal";
 
 
 interface Product {
@@ -20,11 +21,13 @@ export default function Products() {
     const [total, setTotal] = useState<number>(0)
     const [search, setSearch] = useState<string>("");
     const [limit, setLimit] = useState<number>(5);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products`, {
+            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/products`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }, params: {
@@ -84,7 +87,11 @@ export default function Products() {
                 </TableHeader>
                 <TableBody>
                     {table.getRowModel().rows.map(row => (
-                        <TableRow key={row.id}>
+                        <TableRow key={row.id} onClick={() => {
+                            const product = row.original;
+                            setSelectedProduct(product);
+                            setModalOpen(true);
+                        }} className="cursor-pointer hover:bg-gray-100">
                             {row.getVisibleCells().map(cell => (
                                 <TableCell key={cell.id}>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -128,6 +135,15 @@ export default function Products() {
                 </Button>
 
             </div>
+
+            {modalOpen && (
+  <ProductModal
+    product={selectedProduct}
+    onClose={() => setModalOpen(false)}
+    onUpdated={fetchProducts}
+  />
+)}
+
         </div>
     )
 }
