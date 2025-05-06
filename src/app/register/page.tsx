@@ -20,7 +20,7 @@ export default function RegisterPage() {
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [error, setError] = useState<string>("")
+    const [error, setError] = useState("")
 
     const router = useRouter()
 
@@ -40,7 +40,7 @@ export default function RegisterPage() {
             const token = response.data.token;
             localStorage.setItem('token', token);
             router.push('/login')
-        } catch (error: any) {
+        } catch (error) {
             setError(error?.response?.data?.message || "Registration Failed")
 
         }

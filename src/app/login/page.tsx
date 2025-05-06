@@ -15,7 +15,7 @@ export default function LoginPage() {
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [error, setError] = useState<string>("")
+    const [error, setError] = useState("")
 
     const router = useRouter()
 
@@ -35,7 +35,7 @@ export default function LoginPage() {
             const token = response.data.token;
             localStorage.setItem('token', token);
             router.push('/products')
-        } catch (error: any) {
+        } catch (error) {
             setError(error?.response?.data?.message || "Login Failed")
 
         }
