@@ -67,6 +67,32 @@ export default function Dashboard() {
             console.log(error, 'error');
         }
     };
+    const handleRemoveItem = async (cartItemId: string) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:8888/api/carts/item/${cartItemId}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            
+            fetchCarts();
+        } catch (error) {
+            console.log('Error removing item from cart:', error);
+        }
+    };
+    
+    const handleCheckout = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(`http://localhost:8888/api/carts/checkout`, {}, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            
+            fetchCarts();
+        } catch (error) {
+            console.log('Error during checkout:', error);
+        }
+    };
+    
 
     useEffect(() => {
         fetchProducts();
@@ -193,6 +219,7 @@ export default function Dashboard() {
                                     <TableHead>Product Title</TableHead>
                                     <TableHead>price</TableHead>
                                     <TableHead>Quantity</TableHead>
+                                    <TableHead>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -203,7 +230,11 @@ export default function Dashboard() {
                                              <TableCell>{item.productId.title}</TableCell> 
                                              <TableCell>{item.productId.price}</TableCell> 
                                              <TableCell>{item.quantity}</TableCell> 
-                                             
+                                             <TableCell>
+                                        <Button onClick={() => handleRemoveItem(item.productId._id)}>
+                                            Remove
+                                        </Button>
+                                    </TableCell>
                                          </TableRow>
                                      ))}
                                  </React.Fragment>
@@ -211,6 +242,7 @@ export default function Dashboard() {
                             </TableBody>
                         </Table>
                     )}
+                    <Button onClick={handleCheckout}>Checkout</Button>
                 </div>
             )}
 
