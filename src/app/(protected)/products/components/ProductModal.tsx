@@ -64,7 +64,7 @@ const handleAddToCart = async () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://localhost:8888/api/carts`,
+        `https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts`,
         { productId: form._id, quantity: 1 },
         {
           headers: {

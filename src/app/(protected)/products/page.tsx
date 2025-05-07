@@ -31,7 +31,7 @@ export default function Dashboard() {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:8888/api/products`, {
+            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/products`, {
                 headers: { "Authorization": `Bearer ${token}` },
                 params: { page, limit, search }
             });
@@ -46,7 +46,7 @@ export default function Dashboard() {
     const fetchCarts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:8888/api/carts`, {
+            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setCarts([response.data.data])
@@ -59,7 +59,7 @@ export default function Dashboard() {
     const fetchOrders = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:8888/api/orders`, {
+            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/orders`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setOrders(response.data.data);
@@ -70,7 +70,7 @@ export default function Dashboard() {
     const handleRemoveItem = async (cartItemId: string) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8888/api/carts/item/${cartItemId}`, {
+            await axios.delete(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts/item/${cartItemId}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             
@@ -83,7 +83,7 @@ export default function Dashboard() {
     const handleCheckout = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`http://localhost:8888/api/carts/checkout`, {}, {
+            const response = await axios.post(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts/checkout`, {}, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             
