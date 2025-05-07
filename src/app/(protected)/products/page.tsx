@@ -62,7 +62,7 @@ export default function Dashboard() {
             const response = await axios.get(`http://localhost:8888/api/orders`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
-            setOrders(response.data);
+            setOrders(response.data.data);
         } catch (error) {
             console.log(error, 'error');
         }
@@ -83,11 +83,12 @@ export default function Dashboard() {
     const handleCheckout = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:8888/api/carts/checkout`, {}, {
+            const response = await axios.post(`http://localhost:8888/api/carts/checkout`, {}, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             
-            fetchCarts();
+            alert(`Order placed successfully! Order ID: ${response.data.orderId}`);
+            fetchCarts()
         } catch (error) {
             console.log('Error during checkout:', error);
         }
@@ -95,10 +96,19 @@ export default function Dashboard() {
     
 
     useEffect(() => {
-        fetchProducts();
-        fetchCarts();
-        fetchOrders();
-    }, [page, search, limit]);
+        if(activeTab ==="carts"){
+            fetchCarts();
+
+        }
+        if(activeTab ==="orders"){
+            fetchOrders();
+
+        }
+        if(activeTab ==="products"){
+            fetchProducts();
+
+        }
+    }, [page, search, limit, activeTab]);
 
     const columns: ColumnDef<Product>[] = [
         { accessorKey: 'title', header: 'Title' },
@@ -246,31 +256,39 @@ export default function Dashboard() {
                 </div>
             )}
 
-            {activeTab === 'orders' && (
-                <div>
-                    
-                    {orders?.length === 0 ? <p>No orders found.</p> : (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Order ID</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Total</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {orders?.map((order) => (
-                                    <TableRow key={order._id}>
-                                        <TableCell>{order._id}</TableCell>
-                                        <TableCell>{order.status}</TableCell>
-                                        <TableCell>{order.total}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+{activeTab === 'orders' && (
+    <div>
+        {orders.length === 0 ? (
+            <p>No orders found.</p>
+        ) : (
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Order ID</TableHead>
+                        <TableHead>Product ID</TableHead>
+                        <TableHead>Quantity</TableHead>
+                        <TableHead>Total Amount</TableHead>
+                        <TableHead>Placed At</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {orders.map(order =>
+                        order.OrderItems.map((item, index) => (
+                            <TableRow key={`${order.id}-${index}`}>
+                                <TableCell>{order.id}</TableCell>
+                                <TableCell>{item.productId}</TableCell>
+                                <TableCell>{item.quantity}</TableCell>
+                                <TableCell>{order.totalAmount}</TableCell>
+                                <TableCell>{new Date(order.createdAt).toLocaleString()}</TableCell>
+                            </TableRow>
+                        ))
                     )}
-                </div>
-            )}
+                </TableBody>
+            </Table>
+        )}
+    </div>
+)}
+
         </div>
     );
 }
