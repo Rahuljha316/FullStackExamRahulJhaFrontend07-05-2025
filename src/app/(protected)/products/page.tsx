@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+
 'use client'
 
 import { Button } from "@/components/ui/button";
@@ -5,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import axios from "axios"
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ProductModal from "./components/ProductModal";
 
 interface Product {
@@ -28,10 +32,10 @@ export default function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false);
 
     
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/products`, {
+            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products`, {
                 headers: { "Authorization": `Bearer ${token}` },
                 params: { page, limit, search }
             });
@@ -40,13 +44,13 @@ export default function Dashboard() {
         } catch (error) {
             console.log(error, 'error');
         }
-    };
+    },[limit, page, search]);
 
     
     const fetchCarts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts`, {
+            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/carts`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setCarts([response.data.data])
@@ -59,7 +63,7 @@ export default function Dashboard() {
     const fetchOrders = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/orders`, {
+            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/orders`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setOrders(response.data.data);
@@ -70,7 +74,7 @@ export default function Dashboard() {
     const handleRemoveItem = async (cartItemId: string) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts/item/${cartItemId}`, {
+            await axios.delete(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/carts/item/${cartItemId}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             
@@ -83,7 +87,7 @@ export default function Dashboard() {
     const handleCheckout = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts/checkout`, {}, {
+            const response = await axios.post(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/carts/checkout`, {}, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             
@@ -108,7 +112,7 @@ export default function Dashboard() {
             fetchProducts();
 
         }
-    }, [page, search, limit, activeTab]);
+    }, [page, search, limit, activeTab, fetchProducts]);
 
     const columns: ColumnDef<Product>[] = [
         { accessorKey: 'title', header: 'Title' },
@@ -235,7 +239,7 @@ export default function Dashboard() {
                             <TableBody>
                                 {carts?.map((cart) => (
                                      <React.Fragment key={cart._id}>
-                                     {cart.items.map((item) => (
+                                     {cart.items.map((item: { _id: React.Key | null | undefined; productId: { title: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; price: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; _id: string; }; quantity: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }) => (
                                          <TableRow key={item._id}>
                                              <TableCell>{item.productId.title}</TableCell> 
                                              <TableCell>{item.productId.price}</TableCell> 
@@ -273,7 +277,7 @@ export default function Dashboard() {
                 </TableHeader>
                 <TableBody>
                     {orders.map(order =>
-                        order.OrderItems.map((item, index) => (
+                        order.OrderItems.map((item: { productId: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; quantity: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }, index: any) => (
                             <TableRow key={`${order.id}-${index}`}>
                                 <TableCell>{order.id}</TableCell>
                                 <TableCell>{item.productId}</TableCell>

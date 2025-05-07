@@ -34,7 +34,7 @@ export default function RegisterPage() {
         }
 
         try {
-            const response = await axios.post("https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/auth/register", {
+            const response = await axios.post("https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/auth/register", {
                 email, password
             })
             const token = response.data.token;

@@ -18,7 +18,7 @@ interface ProductModalProps {
   onUpdated: () => void;
 }
 
-export default function ProductModal({ product, onClose, onUpdated }: ProductModalProps) {
+export default function ProductModal({ product, onClose }: ProductModalProps) {
   const [form, setForm] = useState<Product>({
     _id: product?._id || '',
     title: product?.title || '',
@@ -64,7 +64,7 @@ const handleAddToCart = async () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/carts`,
+        `https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/carts`,
         { productId: form._id, quantity: 1 },
         {
           headers: {
