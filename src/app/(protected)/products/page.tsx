@@ -27,7 +27,7 @@ export default function Products() {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.get(`https://fullstackexamrahuljhabackend07-05-2025.onrender.com/api/products/api/products`, {
+            const response = await axios.get(`http://localhost:8888/api/products`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }, params: {
